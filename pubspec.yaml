@@ -56,7 +56,7 @@ dependencies:
   pointycastle: ^4.0.0            # RSA 加密，用于正方教务系统登录时对用户密码的加密
   
   # 本地通知
-  flutter_local_notifications: ^19.4.2  # 本地通知,用于发送课程通知(上课提醒)
+  flutter_local_notifications: ^17.0.0  # 本地通知,用于发送课程通知(上课提醒)
   app_settings: ^6.1.1                  # 用于打开系统设置中的应用设置页面
   timezone: ^0.10.1                     # flutter_local_notifications 用到的
   disable_battery_optimization: ^1.1.2  # 打开自启动/电池优化设置 (Android)
