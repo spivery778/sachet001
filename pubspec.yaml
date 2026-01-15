@@ -19,6 +19,10 @@ dependencies:
   # 👇 核心插件（已锁死版本，去掉了 ^，确保兼容 Dart 3.3.4）
   shared_preferences: 2.2.2          # 降级锁死
   flutter_local_notifications: 17.0.0 # 我们刚才改好的
+  # 👇 把这三个被误删的兄弟加回来（已锁死安全版本）
+  app_settings: 6.0.0
+  timezone: 0.9.2
+  disable_battery_optimization: 1.1.2
   flutter_localizations:
     sdk: flutter
   
