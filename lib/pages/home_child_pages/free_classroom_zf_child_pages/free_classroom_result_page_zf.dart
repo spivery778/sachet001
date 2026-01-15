@@ -102,7 +102,7 @@ class _FreeClassroomResultPageZFState extends State<FreeClassroomResultPageZF> {
                 TableRow(
                   decoration: BoxDecoration(
                     color:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                        Theme.of(context).colorScheme.surfaceVariant,
                   ),
                   children: List.generate(
                     _selectedItems.length,
@@ -121,7 +121,7 @@ class _FreeClassroomResultPageZFState extends State<FreeClassroomResultPageZF> {
                 ...widget.listData.map(
                   (freeClassroom) => TableRow(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerLow,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     children: [
                       ..._selectedItems.map(
