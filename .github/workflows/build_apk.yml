@@ -1,0 +1,31 @@
+name: Build Android App
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build APK (Debug)
+      # 使用 Debug 模式打包，通过率最高，无需配置复杂的签名文件
+      run: flutter build apk --debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-app-debug
+        path: build/app/outputs/flutter-apk/app-debug.apk
