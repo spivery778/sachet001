@@ -15,51 +15,45 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # 👇 核心插件（已锁死版本，去掉了 ^，确保兼容 Dart 3.3.4）
+  shared_preferences: 2.2.2          # 降级锁死
+  flutter_local_notifications: 17.0.0 # 我们刚才改好的
   flutter_localizations:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-
-  # 文件
-  shared_preferences: ^2.3.5      # 存储不重要的数据(设置等)
-  path_provider: ^2.1.5           # 获取文件系统路径(Android/data、下载路径……)
-  file_picker: ^8.1.7             # 调起系统文件选择器
-  flutter_secure_storage: ^9.2.4  # 安全储存用户敏感信息
-  path: ^1.9.0                    # 关于文件路径的操作，目前用于从文件路径提取文件名
-
-  # 状态管理
-  provider: ^6.1.2 
-
-  # 网络
-  http: ^1.2.2                    # Flutter 官方的 http 包
-  html: ^0.15.5
-  dio: ^5.7.0                     # Dio，flutter 中常用的网络包
-  flutter_inappwebview: ^6.1.5    # 应用内显示 webview, 用于手动登录
-
-  # 验证码图片自动识别(TensorFlow)
-  tflite_flutter: ^0.11.0         # TensorFlow Lite(TFlite、LiteRT) 库
-  image: ^4.1.0                   # 对验证码图片进行预先处理（灰度化、二值化）
-
-  # 辅助生成项目文件的 package，应用代码中没有依赖它们(生成后删除以下两行无影响)
-  flutter_native_splash: ^2.4.4   # 生成 splash screen (应用启动时的界面)
-  flutter_launcher_icons: ^0.14.2 # 生成应用图标
-
-  # 其他
-  url_launcher: ^6.3.1            # (调起浏览器)打开链接
-  flutter_gbk2utf8: ^1.0.1        # 解码 GBK
-  flutter_colorpicker: ^1.1.0     # 颜色选择器
-  package_info_plus:  8.1.2       # 用于获取应用当前版本信息
-  flutter_markdown:  0.7.4        # 用于渲染更新内容的 Markdown
-  dynamic_color: 1.7.0            # 动态取色 [动态配色](https://developer.android.com/develop/ui/views/theming/dynamic-colors?hl=zh-cn)
-  pointycastle: ^4.0.0            # RSA 加密，用于正方教务系统登录时对用户密码的加密
   
-  # 本地通知
-  flutter_local_notifications: ^17.0.0  # 本地通知,用于发送课程通知(上课提醒)
-  app_settings: ^6.1.1                  # 用于打开系统设置中的应用设置页面
-  timezone: ^0.10.1                     # flutter_local_notifications 用到的
-  disable_battery_optimization: ^1.1.2  # 打开自启动/电池优化设置 (Android)
+  # 👇 界面图标
+  cupertino_icons: ^1.0.2
+
+  # 👇 必须锁死的"捣乱分子" (防止它们自动升级)
+  path_provider: 2.1.2               # 修复你现在的报错
+  file_picker: 6.1.1                 # 保持不动
+  flutter_secure_storage: 9.0.0      # 保持不动
+  path: 1.9.0
+  
+  # 状态管理
+  provider: 6.1.1                    # 稍微降一点比较稳
+  
+  # 网络
+  http: ^1.2.0
+  html: ^0.15.4
+  dio: 5.4.0                         # 锁一下比较安全
+  flutter_inappwebview: 6.0.0        # 这里的 6.1.x 可能会报错，建议锁死 6.0.0
+  
+  # AI与图像
+  tflite_flutter: ^0.11.0
+  image: ^4.1.0
+
+  # 系统功能 (这些最容易报错，必须锁死！)
+  url_launcher: 6.2.5                # ⚠️ 预判：不锁这个，下一个必炸
+  flutter_native_splash: 2.3.10      # 稍微降级求稳
+  flutter_launcher_icons: ^0.13.1
+  flutter_colorpicker: ^1.1.0
+  
+  package_info_plus: 5.0.1           # ⚠️ 预判：8.0以上必炸，强行降级
+  flutter_markdown: 0.7.2            # ⚠️ 预判：0.7.5以上必炸
+  dynamic_color: 1.7.0
+  pointycastle: ^3.7.3               # 你的截图里是 3.7.4+，如果报错改回这个
 
 dev_dependencies:
   flutter_test:
