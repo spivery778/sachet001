@@ -10,6 +10,10 @@ import 'package:sachet/widgets/homepage_widgets/grade_page_zf_widgets/semester_i
 import 'package:sachet/widgets/homepage_widgets/grade_page_zf_widgets/semester_year_selector.dart';
 import 'package:sachet/widgets/utils_widgets/login_expired_zf.dart';
 
+import 'package:shared_preferences/shared_preferences.dart'; // 新增
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // 新增
+import 'dart:convert'; // 新增，用于处理数据对比
+
 class GradePageZF extends StatelessWidget {
   const GradePageZF({super.key});
 
@@ -277,6 +281,74 @@ class _GradeView extends StatefulWidget {
 
 class _GradeViewState extends State<_GradeView> {
   late Future _dataFuture;
+  // 新增：通知插件实例
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    final zhengFangUserProvider = context.read<ZhengFangUserProvider>();
+    _dataFuture = _getGradeData(zhengFangUserProvider);
+    
+    // 新增：初始化通知设置
+    _initNotifications();
+  }
+
+  /// 新增：初始化通知功能的函数
+  void _initNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher'); // 确保你app图标叫这个，或者用 'app_icon'
+    
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+        
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  /// 新增：发送通知的函数
+  Future<void> _showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'grade_channel_id', '成绩更新通知', 
+            channelDescription: '当查询到新成绩时发送通知',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+            
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+        
+    await flutterLocalNotificationsPlugin.show(
+        0, title, body, platformChannelSpecifics);
+  }
+
+  /// 新增：检查是否有新成绩
+  Future<void> _checkNewGrades(dynamic currentGrades) async {
+    try {
+      if (currentGrades == null) return;
+      
+      // 这里的 logic 假设 currentGrades 是一个 List。
+      // 如果它是其他对象，你需要根据实际情况调整，比如 currentGrades.data
+      List gradesList = currentGrades as List; 
+      
+      final prefs = await SharedPreferences.getInstance();
+      // 获取上次保存的成绩数量
+      int? lastCount = prefs.getInt('last_grade_count_${widget.semesterYear}');
+      
+      // 如果上次有记录，且现在的数量比上次多，说明出分了！
+      if (lastCount != null && gradesList.length > lastCount) {
+        int diff = gradesList.length - lastCount;
+        _showNotification("🎉 成绩更新啦！", "发现 $diff 门新课程的成绩，快来看看吧！");
+      }
+      
+      // 保存当前的数量，供下次对比
+      await prefs.setInt('last_grade_count_${widget.semesterYear}', gradesList.length);
+      
+    } catch (e) {
+      print("成绩比对出错: $e");
+    }
+  }
 
   /// 从登录页面回来，如果 value 为 true 说明登录成功，需要刷新
   void onGoBack(dynamic value) {
@@ -295,14 +367,11 @@ class _GradeViewState extends State<_GradeView> {
       semesterYear: widget.semesterYear,
       semesterIndex: widget.semesterIndex,
     );
+    
+    // 新增：获取到数据后，立马进行比对
+    _checkNewGrades(result);
+    
     return result;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    final zhengFangUserProvider = context.read<ZhengFangUserProvider>();
-    _dataFuture = _getGradeData(zhengFangUserProvider);
   }
 
   @override
