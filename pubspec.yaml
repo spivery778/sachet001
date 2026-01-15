@@ -15,9 +15,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # 👇 请确保下面这几行的缩进和上面的 flutter 对齐
-  shared_preferences: ^2.2.0
-  flutter_local_notifications: ^15.1.0
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0
