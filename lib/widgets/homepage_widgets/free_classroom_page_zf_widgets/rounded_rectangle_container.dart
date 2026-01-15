@@ -23,7 +23,7 @@ class RoundedRectangleContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHigh.withAlpha(200),
+        ).colorScheme.surfaceVariant.withAlpha(200),
         borderRadius: BorderRadius.circular(10),
       ),
       child: direction == Axis.vertical
