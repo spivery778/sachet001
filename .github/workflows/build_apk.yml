@@ -12,16 +12,22 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # 👇 新增：设置 Java 17 (新版安卓构建需要)
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        channel: 'stable'
+        flutter-version: '3.19.6' # 👈 关键修改
 
     - name: Install dependencies
       run: flutter pub get
 
     - name: Build APK (Debug)
-      # 使用 Debug 模式打包，通过率最高，无需配置复杂的签名文件
       run: flutter build apk --debug
 
     - name: Upload APK
